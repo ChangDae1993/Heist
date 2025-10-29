@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(menuName ="Heist/GameConfig")]
+[CreateAssetMenu(menuName = "Heist/GameConfig")]
 
-public class GameConfig : MonoBehaviour
+public class GameConfig : ScriptableObject
 {
     [Header("Speed")]
     public float forwardSpeed = 15f;     // basic move forward speed
