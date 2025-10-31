@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(CarController))]
 public class PlayerInput : MonoBehaviour
@@ -15,33 +16,45 @@ public class PlayerInput : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-#if UNITY_EDITOR || UNITY_STANDALONE
-        float h = Input.GetAxisRaw("Horizontal");
-        car.SetMoveInput(h);
-#else
         float h = 0f;
-        if (Input.touchCount > 0)
-        {
-            var t = Input.GetTouch(0);
-            if (t.phase == TouchPhase.Began)
-            {
-                dragging = true;
-                lastPos = t.position;
-            }
-            else if (t.phase == TouchPhase.Moved && dragging)
-            {
-                var delta = t.position - lastPos;
-                lastPos = t.position;
 
-                h = Mathf.Clamp(delta.x / pixelsPerFullInput, -1f, 1f);
-            }
-            else if (t.phase == TouchPhase.Ended || t.phase == TouchPhase.Canceled)
+        // 1) Keyboard (A/D, ←/→)
+        if (Keyboard.current != null)
+        {
+            if(Keyboard.current.leftArrowKey.isPressed || Keyboard.current.aKey.isPressed)
             {
-                dragging = false;
-                h = 0f;
+                h -= 1f;
+            }
+
+            if(Keyboard.current.rightArrowKey.isPressed || Keyboard.current.dKey.isPressed)
+            {
+                h += 1f;
             }
         }
+
+        // 2) Touch (Mobile)
+        if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.isPressed)
+        {
+            var touch = Touchscreen.current.primaryTouch;
+            var delta = touch.delta.ReadValue();                 // 프레임당 픽셀 변화량
+            h = Mathf.Clamp(delta.x / pixelsPerFullInput, -1f, 1f);
+            dragging = true;
+        }
+        else
+        {
+            // 3) Mouse Drag (Editor/PC)
+            if (Mouse.current != null && Mouse.current.leftButton.isPressed)
+            {
+                var delta = Mouse.current.delta.ReadValue();
+                h = Mathf.Clamp(delta.x / pixelsPerFullInput, -1f, 1f);
+                dragging = true;
+            }
+            else
+            {
+                dragging = false;
+            }
+        }
+
         car.SetMoveInput(h);
-#endif
     }
 }
