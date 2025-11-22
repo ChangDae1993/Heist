@@ -20,7 +20,7 @@ public class CarController : MonoBehaviour
     private void FixedUpdate()
     {
         float forward = (config ? config.forwardSpeed : 15f) * Time.fixedDeltaTime;
-        float lateral = (config ? config.lateralSpeed : 8f) *moveInput * Time.fixedDeltaTime;
+        float lateral = (config ? config.lateralSpeed : 8f) * moveInput * Time.fixedDeltaTime;
 
         Vector3 next = rb.position + Vector3.forward * forward + Vector3.right * lateral;
 
