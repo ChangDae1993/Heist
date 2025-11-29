@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c045ac84204966f42854bcefb9ee88a1, type: 3}
   m_Name: GameConfig
   m_EditorClassIdentifier: Assembly-CSharp::GameConfig
-  forwardSpeed: 15
+  forwardSpeed: 10
   lateralSpeed: 8
   laneLimit: 5
   chunkLength: 30
