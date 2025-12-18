@@ -1,12 +1,12 @@
 using UnityEngine;
 
-public class CarController : MonoBehaviour
+public class Player : MonoBehaviour
 {
     [Header("Speed")]
-    public float maxForwardSpeed = 15f;
-    public float maxReverseSpeed = 5f;
-    public float acceleration = 20f;
-    public float brakeDeceleration = 30f;
+    public float maxForwardSpeed = 4f;
+    public float maxReverseSpeed = 2.5f;
+    public float acceleration = 10f;
+    public float brakeDeceleration = 10f;
     public float friction = 10f;
 
     [Header("Turning")]
@@ -21,21 +21,13 @@ public class CarController : MonoBehaviour
 
     void HandleMovement()
     {
-        float turnInput = 0f;
+        float steerInput = CarInput.Instance.steer;
+        float throttleInput = CarInput.Instance.throttle;
 
-        if (Input.GetKey(KeyCode.LeftArrow))
-            turnInput = -1f;
-        else if (Input.GetKey(KeyCode.RightArrow))
-            turnInput = 1f;
-
-        if (Input.GetKey(KeyCode.UpArrow))
-        {
+        if (throttleInput > 0)
             currentSpeed += acceleration * Time.deltaTime;
-        }
-        else if (Input.GetKey(KeyCode.DownArrow))
-        {
+        else if (throttleInput < 0)
             currentSpeed -= brakeDeceleration * Time.deltaTime;
-        }
         else
         {
             if (currentSpeed > 0)
@@ -43,6 +35,7 @@ public class CarController : MonoBehaviour
             else if (currentSpeed < 0)
                 currentSpeed += friction * Time.deltaTime;
         }
+        Debug.Log(acceleration);
 
         currentSpeed = Mathf.Clamp(
             currentSpeed,
@@ -53,6 +46,6 @@ public class CarController : MonoBehaviour
         transform.Translate(Vector3.forward * currentSpeed * Time.deltaTime);
 
         float speedFactor = Mathf.Clamp01(Mathf.Abs(currentSpeed) / maxForwardSpeed);
-        transform.Rotate(Vector3.up, turnInput * turnSpeed * speedFactor * Time.deltaTime);
+        transform.Rotate(Vector3.up, steerInput * turnSpeed * speedFactor * Time.deltaTime);
     }
 }
