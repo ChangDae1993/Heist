@@ -1099,7 +1099,7 @@ GameObject:
   - component: {fileID: 729964426}
   - component: {fileID: 729964427}
   - component: {fileID: 729964428}
-  - component: {fileID: 729964429}
+  - component: {fileID: 729964430}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1245,7 +1245,6 @@ MonoBehaviour:
   scanner: {fileID: 0}
   attackObj: {fileID: 8370478025483794703, guid: cc5aba6ac05a6e047972e2892f6d9344, type: 3}
   radius: 5
-  rotateSpeed: 150
 --- !u!114 &729964429
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1264,6 +1263,20 @@ MonoBehaviour:
   brakeDeceleration: 10
   friction: 10
   turnSpeed: 120
+--- !u!114 &729964430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 729964421}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23f3e505c38d5bd429acb7ea4f92e0cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scanner: {fileID: 0}
+  attackObj: {fileID: 890998828593684376, guid: 2d1ed0ea21017444e8ae2c1f3092d3fe, type: 3}
 --- !u!1 &829039740
 GameObject:
   m_ObjectHideFlags: 0
