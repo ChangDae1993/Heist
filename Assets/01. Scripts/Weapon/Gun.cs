@@ -1,18 +1,20 @@
 using UnityEngine;
+using properties;
+using System.Collections.Generic;
 
 public class Gun : Weapon
 {
     private float timer;
-    
+    private List<properties.Weapons> guns = new List<Weapons>();
 
     void Awake()
     {
+        guns = JsonLoader.GetWeaponData(WeaponType.Gun);
     }
     void Start()
     {
         InitWeapon(this);
-        damage = 1;
-        speed = 3;
+        levelUp();
     }
 
     void Update()
@@ -41,9 +43,13 @@ public class Gun : Weapon
     }
     public override void levelUp()
     {
-        damage++;
-        speed++;
+        level++;
+        
+        if (guns.Count <= level)
+            return;
 
-        //배열에 접근해서 해야 함
+        coolTime = guns[level].coolTime;
+        damage = guns[level].damage;
+        speed = guns[level].speed;
     }
 }

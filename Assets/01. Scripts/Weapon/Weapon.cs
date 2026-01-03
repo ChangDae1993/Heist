@@ -4,14 +4,14 @@ using UnityEngine;
 
 public abstract class Weapon : MonoBehaviour
 {
-    public float coolTime;
 
     [SerializeField] protected Scanner scanner;
     [SerializeField] protected GameObject attackObj;
 
+    protected float coolTime;
     protected float damage;
     protected float speed;
-    protected int level;
+    protected int level = -1;
 
     private List<Weapon> weapons = new List<Weapon>();
     public void Start()

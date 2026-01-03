@@ -1,15 +1,19 @@
 using System.Collections.Generic;
+using properties;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class Book : Weapon
 {
     public float radius = 5f;
-    public float rotateSpeed = 150f;
-
     private float angle;
-    private List<BookObj> books = new List<BookObj>();
+    private List<BookObj> bookObjs = new List<BookObj>();
+    private List<properties.Weapons> books = new List<Weapons>();
 
+    private void Awake()
+    {
+        books = JsonLoader.GetWeaponData(properties.WeaponType.Book);
+    }
     void Update()
     {
         if (Keyboard.current.spaceKey.wasPressedThisFrame)
@@ -18,12 +22,12 @@ public class Book : Weapon
         }
 
         UpdateBookPositions();
-        angle += rotateSpeed * Time.deltaTime;
+        angle += speed * Time.deltaTime;
     }
 
     void UpdateBookPositions()
     {
-        int count = books.Count;
+        int count = bookObjs.Count;
         if (count == 0) return;
 
         for (int i = 0; i < count; i++)
@@ -34,23 +38,28 @@ public class Book : Weapon
 
             Vector3 pos = new Vector3(Mathf.Cos(rad), 0, Mathf.Sin(rad)) * radius;
 
-            books[i].SetPosition(transform.position + pos);
-        }
-    }
-
-    void AddBook()
-    {
-        BookObj book = ObjectPool.Instance.Get(attackObj).GetComponent<BookObj>();
-        books.Add(book);
-        foreach(BookObj child in books)
-        {
-            child.Init(damage);
+            bookObjs[i].SetPosition(transform.position + pos);
         }
     }
 
     public override void levelUp()
     {
-        damage += 1;
-        AddBook();
+        if (level + 1 < books.Count)
+        {
+            level++;
+            speed = books[level].speed;
+            damage = books[level].damage;
+        }
+        AddBooks();
+    }
+
+    private void AddBooks()
+    {
+        BookObj book = ObjectPool.Instance.Get(attackObj).GetComponent<BookObj>();
+        bookObjs.Add(book);
+        foreach (BookObj child in bookObjs)
+        {
+            child.Init(damage);
+        }
     }
 }

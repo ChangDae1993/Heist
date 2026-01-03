@@ -1,55 +1,80 @@
 using System.Collections.Generic;
-using NUnit.Framework.Interfaces;
+using properties;
 using UnityEngine;
-
-[System.Serializable]
-public struct TestData
-{
-    public int a;
-    public int b;
-}
-
-[System.Serializable]
-public struct Test2Data
-{
-    public string a;
-    public List<int> b;
-    public float c;
-}
 
 public static class JsonLoader
 {
-    //public static T Load<T> (string fileName)
-    //{
-    //    TextAsset[] files = Resources.LoadAll<TextAsset>("");
+    public static Dictionary<properties.WeaponType, List<properties.Weapons>> weaponDatas = new Dictionary<properties.WeaponType, List<properties.Weapons>>();
+   
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    public static void Load()
+    {
+        TextAsset[] files = Resources.LoadAll<TextAsset>("");
 
-    //    foreach (TextAsset file in files)
-    //    {
-    //        if(file.name == "")
-    //        {
+        foreach (TextAsset file in files)
+        {
+            if (file.name == "Weapons")
+            {
+                LoadWeapons(file);
+            }
+            else if (file.name == "Monsters")
+            {
+                LoadMonsters();
+            }
+        }
 
-    //        }
-    //        else if (file.name == "")
-    //        {
-                
-    //        }
-    //    }
+        void LoadWeapons(TextAsset json)
+        {
+            var root = JsonUtility.FromJson<WeaponRoot>(json.text);
 
+            weaponDatas.Clear();
 
-    //void LoadTest()
-    //{
-    //    TextAsset json = Resources.Load<TextAsset>("test");
-    //    TestData data = JsonUtility.FromJson<TestData>(json.text);
+            foreach (var group in root.weapons)
+            {
+                weaponDatas[group.WeaponTypeEnum] = group.levels;
+            }
 
-    //    Debug.Log($"test.json ¡æ a: {data.a}, b: {data.b}");
-    //}
+            LogAllWeaponData();
+        }
 
-    //void LoadTest2()
-    //{
-    //    TextAsset json = Resources.Load<TextAsset>("test2");
-    //    Test2Data data = JsonUtility.FromJson<Test2Data>(json.text);
+        void LoadMonsters()
+        {
 
-    //    Debug.Log($"test2.json ¡æ a: {data.a}, c: {data.c}");
-    //    Debug.Log($"b count: {data.b.Count}");
-    //}
+        }
+    }
+
+    public static void LogAllWeaponData()
+    {
+        foreach (var data in weaponDatas)
+        {
+            WeaponType type = data.Key;
+            List<Weapons> levels = data.Value;
+
+            Debug.Log("WEAPON TYPE: " + type);
+
+            if (levels == null)
+            {
+                Debug.Log("  (No levels)");
+                continue;
+            }
+
+            foreach (var values in levels)
+            {
+                Debug.Log(
+                    $"  DAMAGE: {values.damage}, " +
+                    $"COOL: {values.coolTime}, " +
+                    $"SPEED: {values.speed}"
+                );
+            }
+        }
+    }
+
+    public static List<properties.Weapons> GetWeaponData(WeaponType type)
+    {
+        if(weaponDatas.ContainsKey(type))
+        {
+            return weaponDatas[type];
+        }
+        return null;
+    }
 }

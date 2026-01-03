@@ -1,0 +1,18 @@
+{
+    "weapons": [
+        {
+            "weaponType": "Gun",
+            "levels": [
+                { "damage": 1, "coolTime": 0.3, "speed": 3 },
+                { "damage": 2, "coolTime": 0.1, "speed": 30 }
+            ]
+        },
+        {
+            "weaponType": "Book",
+            "levels": [
+                { "damage": 5, "speed": 120 },
+                { "damage": 5, "speed": 300 }
+            ]
+        }
+    ]
+}
