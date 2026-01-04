@@ -14,7 +14,7 @@ public abstract class Weapon : MonoBehaviour
     protected int level = -1;
 
     private List<Weapon> weapons = new List<Weapon>();
-    public void Start()
+    private void Start()
     {
         scanner = GetComponentInParent<Scanner>();
     }

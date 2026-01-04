@@ -33,39 +33,11 @@ public static class JsonLoader
             {
                 weaponDatas[group.WeaponTypeEnum] = group.levels;
             }
-
-            LogAllWeaponData();
         }
 
         void LoadMonsters()
         {
 
-        }
-    }
-
-    public static void LogAllWeaponData()
-    {
-        foreach (var data in weaponDatas)
-        {
-            WeaponType type = data.Key;
-            List<Weapons> levels = data.Value;
-
-            Debug.Log("WEAPON TYPE: " + type);
-
-            if (levels == null)
-            {
-                Debug.Log("  (No levels)");
-                continue;
-            }
-
-            foreach (var values in levels)
-            {
-                Debug.Log(
-                    $"  DAMAGE: {values.damage}, " +
-                    $"COOL: {values.coolTime}, " +
-                    $"SPEED: {values.speed}"
-                );
-            }
         }
     }
 

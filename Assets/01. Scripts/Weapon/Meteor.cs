@@ -8,10 +8,11 @@ public class Meteor : Weapon
 {
     List<properties.Weapons> meteors = new List<properties.Weapons>();
 
-    private int count;
-    private float duration;
-    private float timer;
-    private bool isTimer;
+    private float   duration;
+    private float   timer;
+    private int     count;
+    private bool    isTimer;
+    private Vector4 groundSize;
     private void Awake()
     {
         meteors = JsonLoader.GetWeaponData(properties.WeaponType.Meteor);
@@ -21,6 +22,7 @@ public class Meteor : Weapon
     {
         count = 0;
         isTimer = true;
+        groundSize = GameManager.Instance.GetGroundSize();
     }
 
     void Update()
@@ -35,6 +37,10 @@ public class Meteor : Weapon
                 isTimer = false;
             }
         }
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            levelUp();
+        }
     }
 
     IEnumerator Fire()
@@ -46,10 +52,17 @@ public class Meteor : Weapon
         {
             MeteorObj meteor = ObjectPool.Instance.Get(attackObj).GetComponent<MeteorObj>();
 
-            meteor.Init();
-            meteor.transform.position = this.transform.position;
+            meteor.Init(damage);
+            float posX = Random.Range(groundSize.x, groundSize.y);
+            float posZ = Random.Range(groundSize.z, groundSize.w);
+            meteor.transform.position = new Vector3(posX,10,posZ);
+            meteor.transform.rotation = Quaternion.identity;
+            meteor.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+            meteor.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
+
             yield return new WaitForSeconds(cool);
         }
+        isTimer = true;
     }
     public override void levelUp()
     {
